@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html ng-app="plunker">
+
+  <head>
+    <meta charset="utf-8" />
+    <title>AngularJS Plunker</title>
+    <script>document.write('<base href="' + document.location + '" />');</script>
+    <link rel="stylesheet" href="style.css" />
+    <script data-require="angular.js@1.4.x" src="https://code.angularjs.org/1.4.9/angular.js" data-semver="1.4.9"></script>
+    <script src="app.js"></script>
+  </head>
+
+  <body ng-controller="MainCtrl">
+    <h1>Welcom To My Tasks</h1>
+     <input data-ng-model="newItem"><button data-ng-click="addItem(newItem)">Add</button>
+     
+     <h2><u>Tasks</u></h2>
+     
+     <ul>
+      <li ng-repeat="int in array track by $index">
+        {{int}}
+        <button data-ng-click="removeItem($index)">Remove</button>
+      </li>
+    </ul>
+  </body>
+
+</html>
