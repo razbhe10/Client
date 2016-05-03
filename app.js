@@ -1,35 +1,43 @@
 var app = angular.module('plunker', []);
 
 app.controller('MainCtrl', function($scope, $http, $timeout) {
-  $scope.array = ['1','2','3'];
+  $scope.array = [];
+  $scope.arrayIndex = [];
+  var serverUrl = '/tasks';
   
   $scope.removeItem = function(index)
   {
     $scope.array.splice(index, 1);
   }
   
-   $scope.addItem = function(item){
-     if(item != null)
-         $scope.array.push(item);
-     
-     $scope.newItem = null;
-  }
-  
-  
-   $timeout(function(){
-     $http.get('http://jsonplaceholder.typicode.com/posts/1').then(
+  $scope.refresh = function(){
+     $http.get(serverUrl).then(
        function(res)
        {
-         var strings = res.data.title.split("\n");
-         for (index in strings) {
-           $scope.array.push(strings[index]);
+         $scope.array = [];
+         for (var index in res.data) {
+           $scope.array.push("ID: " + res.data[index].id + "    Description: " + res.data[index].description);
+           $scope.arrayIndex.push(res.data[index].id);
          }
          
        },
   
       function(res)
       {
-         debugger;
-      })
-  },500)
+      });
+      }
+      
+    $scope.addItem = function(newItem){
+    var t = JSON.stringify({"description": newItem});
+    $http.post(serverUrl, t).then(function(result){
+    $scope.array.push(result.data);
+    });
+    };
+    
+    $scope.removeItem = function(index){
+    $http.delete(serverUrl+'/'+ $scope.arrayIndex[index]).then(function(result){
+    $scope.array.splice(index, 1);
+    $scope.arrayIndex.splice(index, 1);
+    });
+    };
 });
